@@ -85,7 +85,7 @@ class messenger implements messenger_interface {
         self::validate_message_form_data($formdata, 'compose');
 
         // Get transformed (valid) post data.
-        $transformeddata = compose_request::get_transformed_post_data($formdata);
+        $transformeddata = compose_request::get_transformed($formdata);
 
         // Get a message instance for this type, either from draft or freshly created.
         $message = self::get_message_instance('compose', $user, $course, $transformeddata, $draftmessage, false);
@@ -107,6 +107,7 @@ class messenger implements messenger_interface {
                                                                block_quickmail_config::get_filemanager_options(),
                                                                $transformeddata->message);
         $message->set('body', $transformeddata->message);
+        $message->set('editor_format', $transformeddata->editor_format);
         $message->update();
 
         
@@ -179,7 +180,7 @@ class messenger implements messenger_interface {
         }
 
         // Get transformed (valid) post data.
-        $transformeddata = broadcast_request::get_transformed_post_data($formdata);
+        $transformeddata = broadcast_request::get_transformed($formdata);
 
         // Get a message instance for this type, either from draft or freshly created.
         $message = self::get_message_instance('broadcast', $user, $course, $transformeddata, $draftmessage, false);
@@ -298,7 +299,7 @@ class messenger implements messenger_interface {
         self::validate_draft_form_data($formdata, 'compose');
 
         // Get transformed (valid) post data.
-        $transformeddata = compose_request::get_transformed_post_data($formdata);
+        $transformeddata = compose_request::get_transformed($formdata);
 
         // Get a message instance for this type, either from draft or freshly created.
         $message = self::get_message_instance('compose', $user, $course, $transformeddata, $draftmessage, true);
@@ -321,6 +322,7 @@ class messenger implements messenger_interface {
                                                                block_quickmail_config::get_filemanager_options(),
                                                                $transformeddata->message);
         $message->set('body', $transformeddata->message);
+        $message->set('editor_format', $transformeddata->editor_format);
         $message->update();
 
         // Clear any existing draft recipients, and add those that have been recently submitted.
@@ -361,7 +363,7 @@ class messenger implements messenger_interface {
         self::validate_draft_form_data($formdata, 'broadcast');
 
         // Get transformed (valid) post data.
-        $transformeddata = broadcast_request::get_transformed_post_data($formdata);
+        $transformeddata = broadcast_request::get_transformed($formdata);
 
         // Get a message instance for this type, either from draft or freshly created.
         $message = self::get_message_instance('broadcast', $user, $course, $transformeddata, $draftmessage, true);
@@ -388,6 +390,7 @@ class messenger implements messenger_interface {
             $transformeddata->message
         );
         $message->set('body', $transformeddata->message);
+        $message->set('editor_format', $transformeddata->editor_format);
         $message->update();
 
         // Clear any existing draft recipient filters, and add this recently submitted value.

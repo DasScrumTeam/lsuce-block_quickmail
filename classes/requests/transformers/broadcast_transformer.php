@@ -32,6 +32,7 @@ class broadcast_transformer extends transformer {
     public function transform_form_data() {
         $this->transformed_data->subject = (string) $this->form_data->subject;
         $this->transformed_data->message = (string) $this->form_data->message_editor['text'];
+        $this->transformed_data->editor_format = $this->get_transformed_editor_format();
         $this->transformed_data->additional_emails = $this->get_transformed_additional_emails();
         $this->transformed_data->signature_id = $this->get_transformed_signature_id();
         $this->transformed_data->message_type = $this->get_transformed_message_type();
@@ -125,6 +126,17 @@ class broadcast_transformer extends transformer {
      */
     public function get_transformed_no_reply() {
         return true;
+    }
+
+    /**
+     * Returns a sanitized editor format from the form post data
+     *
+     * @return int
+     */
+    public function get_transformed_editor_format() {
+        return !empty($this->form_data->message_editor['format'])
+            ? (int) $this->form_data->message_editor['format']
+            : FORMAT_HTML;
     }
 
 }

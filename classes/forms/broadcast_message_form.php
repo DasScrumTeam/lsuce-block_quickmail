@@ -169,6 +169,10 @@ class broadcast_message_form extends \moodleform {
             ? $this->draft_message->get('body')
             : '';
 
+        $defaultformat = $this->is_draft_message()
+            ? $this->draft_message->get('editor_format')
+            : FORMAT_HTML;
+
         $mform->addElement(
             'editor',
             'message_editor',
@@ -176,7 +180,8 @@ class broadcast_message_form extends \moodleform {
             '',
             $this->get_editor_options()
         )->setValue([
-            'text' => $defaulttext
+            'text' => $defaulttext,
+            'format' => $defaultformat
         ]);
         $mform->setType(
             'message_editor',

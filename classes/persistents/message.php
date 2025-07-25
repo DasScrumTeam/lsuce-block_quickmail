@@ -601,6 +601,7 @@ class message extends \block_quickmail\persistents\persistent {
             'signature_id' => $data->signature_id,
             'subject' => $data->subject,
             'body' => $data->message,
+            'editor_format' => $data->editor_format,
             'send_receipt' => $data->receipt,
             'to_send_at' => $data->to_send_at,
             'no_reply' => $data->no_reply,
@@ -667,6 +668,7 @@ class message extends \block_quickmail\persistents\persistent {
         $this->set('alternate_email_id', $data->alternate_email_id);
         $this->set('subject', $data->subject);
         $this->set('body', $data->message);
+        $this->set('editor_format', $data->editor_format);
         $this->set('message_type', $data->message_type);
         $this->set('signature_id', $data->signature_id);
         $this->set('send_receipt', $data->receipt);

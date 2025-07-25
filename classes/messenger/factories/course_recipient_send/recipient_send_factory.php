@@ -111,11 +111,17 @@ abstract class recipient_send_factory {
         $formattedbody = message_body_constructor::get_formatted_body($this->message, $this->message_params->userto, $this->course);
 
         // Append a signature to the formatted body, if appropriate.
-        $formattedbody = signature_appender::append_user_signature_to_body(
+        $context = $this->course ? \context_course::instance($this->course->id) : \context_system::instance();
+        $format = $this->message->get('editor_format') ?: FORMAT_HTML;
+        
+        $signature_appender = new signature_appender(
             $formattedbody,
             $this->message_params->userfrom->id,
-            $this->message->get('signature_id')
+            $this->message->get('signature_id'),
+            $format,
+            $context
         );
+        $formattedbody = $signature_appender->get_signature_appended_body();
 
         // Append attachment download links to the formatted body, if any.
         $formattedbody = attachment_appender::add_download_links($this->message, $formattedbody);

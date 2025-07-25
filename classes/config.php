@@ -236,7 +236,9 @@ class block_quickmail_config {
             'trusttext' => true,
             'subdirs' => true,
             'maxfiles' => -1,
-            'context' => $context
+            'context' => $context,
+            'changeformat' => 1,
+            'formatoptions' => [FORMAT_HTML, FORMAT_MARKDOWN, FORMAT_PLAIN]
         ];
     }
 

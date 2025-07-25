@@ -67,6 +67,16 @@ class message_body_constructor {
             $body = str_replace($constructor->delimit_code($code), $mapped[$code], $body);
         }
 
+        // Apply format_text() processing using the message's editor_format
+        $context = $constructor->get_context();
+        $format = $message->get('editor_format') ?: FORMAT_HTML;
+        
+        $body = format_text($body, $format, [
+            'context' => $context,
+            'trusted' => false,
+            'noclean' => false
+        ]);
+
         return $body;
     }
 
@@ -105,6 +115,18 @@ class message_body_constructor {
      */
     private function get_raw_body() {
         return $this->message->get('body');
+    }
+
+    /**
+     * Helper for returning the appropriate context for format_text()
+     *
+     * @return object
+     */
+    private function get_context() {
+        if ($this->message->get_message_scope() == 'compose' && $this->course) {
+            return \context_course::instance($this->course->id);
+        }
+        return \context_system::instance();
     }
 
 }

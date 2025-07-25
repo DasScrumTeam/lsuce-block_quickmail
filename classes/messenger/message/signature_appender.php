@@ -32,6 +32,8 @@ class signature_appender {
     public $body;
     public $user_id;
     public $signature_id;
+    public $format;
+    public $context;
 
     /**
      * Construct the message signature appender
@@ -39,11 +41,15 @@ class signature_appender {
      * @param string  $body           the message body
      * @param int     $userid        the user id of the user sending the message
      * @param int     $signatureid   the signature id to be appended
+     * @param int     $format        the message format for format_text() processing
+     * @param object  $context       the context for format_text() processing
      */
-    public function __construct($body, $userid, $signatureid = 0) {
+    public function __construct($body, $userid, $signatureid = 0, $format = FORMAT_HTML, $context = null) {
         $this->body = $body;
         $this->user_id = $userid;
         $this->signature_id = $signatureid;
+        $this->format = $format;
+        $this->context = $context ?: \context_system::instance();
     }
 
     public static function append_user_signature_to_body($body, $userid, $signatureid = 0) {
@@ -61,7 +67,14 @@ class signature_appender {
             return $this->body;
         }
 
-        $this->body = $this->body . '<br><br>' . $signature->get('signature');
+        // Apply format_text() processing to the signature using the message's format
+        $formatted_signature = format_text($signature->get('signature'), $this->format, [
+            'context' => $this->context,
+            'trusted' => false,
+            'noclean' => false
+        ]);
+
+        $this->body = $this->body . '<br><br>' . $formatted_signature;
 
         return $this->body;
     }

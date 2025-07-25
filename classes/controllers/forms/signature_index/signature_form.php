@@ -92,7 +92,8 @@ class signature_form extends controller_form {
             null,
             $this->get_editor_options()
         )->setValue([
-            'text' => $this->get_selected_signature('signature')
+            'text' => $this->get_selected_signature('signature'),
+            'format' => $this->get_editor_format()
         ]);
 
         $mform->setType(
@@ -164,6 +165,21 @@ class signature_form extends controller_form {
      */
     private function get_editor_options() {
         return block_quickmail_config::get_editor_options($this->get_custom_data('context'));
+    }
+
+    /**
+     * Returns the editor format, preserving user selection on form resubmission
+     *
+     * @return int
+     */
+    private function get_editor_format() {
+        // Check if form data has been submitted with a format
+        if (isset($this->_form->_submitValues['signature_editor']['format'])) {
+            return (int) $this->_form->_submitValues['signature_editor']['format'];
+        }
+        
+        // Default to HTML format for new signatures
+        return FORMAT_HTML;
     }
 
 }
